@@ -18,6 +18,7 @@ def setup_logging():
 def start_queue_listener():
     for handler in logging.getLogger().handlers:
         if isinstance(handler, logging.handlers.QueueHandler):
+            print("started queue")
             handler.listener.start()
             atexit.register(handler.listener.stop)
 

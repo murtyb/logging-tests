@@ -1,23 +1,24 @@
 from logging_src import logger
 import inspect
 import time
+from functools import wraps
 
 def LogFunctionCall(func):
+    @wraps(func)
     def function_with_logs(*args, **kwargs):
         arg_names_and_values = get_arg_names_and_values(func, args, kwargs)
         logger.debug(f"{func.__name__} was called" , extra=arg_names_and_values)
         return func(*args, **kwargs)
-    function_with_logs.__name__ = func.__name__
     return function_with_logs
 
 def LogFunctionCompletion(func):
+    @wraps(func)
     def function_with_logs(*args, **kwargs):
         start_time = time.time()
         output = func(*args, **kwargs)
         end_time = time.time()
         logger.debug(f"{func.__name__} has completed" , extra={"completion time": round(end_time - start_time, 2)})
         return output
-    function_with_logs.__name__ = func.__name__
     return function_with_logs
 
 def LogFunctionCallAndCompletion(func):
